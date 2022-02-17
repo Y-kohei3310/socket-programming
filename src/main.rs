@@ -18,7 +18,7 @@ fn main() {
     }
     let protocol: &str = &args[1];
     let role: &str = &args[2];
-    let address; &str = &args[3];
+    let address: &str = &args[3];
     match protocol {
         "tcp" => match role {
             "server" => {
@@ -26,7 +26,7 @@ fn main() {
                 tcp_server::serve(address).unwrap_or_else(|e| error!("{}", e));
             }
             "client" => {
-                // TO DO 
+                tcp_client::connect(address).unwrap_or_else(|e| error!("{}", e));
             }
             _ => {
                 missing_role();
@@ -34,10 +34,12 @@ fn main() {
         },
         "udp" => match role {
             "server" => {
-                // TO DO: UDP サーバの呼び出し
+                udp_server::serve(address).unwrap_or_else(|e| error!("{}", e));
+
             }
             "client" => {
-                // TO DO 
+                udp_client::communicate(address).unwrap_or_else(|e| error!("{}", e));
+
             }
             _ => {
                 missing_role();
@@ -48,13 +50,8 @@ fn main() {
             std::process::exit(1);
         }
     }
-    println!("Hello, world!");
 }
-//! #　missing_role
-//! 
-//! 第二引数が不正な時にエラーを出す関数
-//! 
-//! 
+
 fn missing_role(){
     error!("Please specify server or client on the 2nd argument. ");
     std::process::exit(1);
